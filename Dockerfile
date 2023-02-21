@@ -40,6 +40,6 @@ RUN conda env create --name app --file env.yml && \
     conda list
 
 ENTRYPOINT ["/bin/bash", "-c"]
-CMD ["source activate app && gunicorn -b 0.0.0.0:5000 main:app"]
+CMD ["source activate app && gunicorn -b 0.0.0.0:9000 main:app"]
 
 
