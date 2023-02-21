@@ -65,12 +65,7 @@ pipeline{
     post {
          always {
              echo 'One way or another, I have finished'
-             cleanWs(cleanWhenNotBuilt: false,
-                    deleteDirs: true,
-                    disableDeferredWipeout: true,
-                    notFailBuild: true,
-                    patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
-                               [pattern: '.propsfile', type: 'EXCLUDE']])
+             deleteDir() /* clean up our workspace */
          }
     }
 }
