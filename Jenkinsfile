@@ -1,5 +1,8 @@
 pipeline{
    agent any
+   environment{
+     DOCKER_IMAGE_NAME="spandanalakma/python_flask"
+   }
    stages{
      stage('Build Docker Image'){
         when{
@@ -7,7 +10,7 @@ pipeline{
         }
        steps{
            script{
-             app = docker.build("spandanalakma/python_flask")
+             app = docker.build(DOCKER_IMAGE_NAME)
 //              app.inside{
 //                  sh "echo ${curl localhost:5000}"
 //              }
@@ -34,11 +37,26 @@ pipeline{
        steps{
          input 'Deploy to Production?'
          milestone(1)
-         sh'''
-         #/bin/bash
-         docker pull spandanalakma/python_flask:${env.BUILD_NUMBER}
-         docker run --restart always -n python-app -p 5000:5000 -d spandanalakma/python_flask:${env.BUILD_NUMBER}
-         '''
+         withCredentials([usernamePassword(credentialsId: 'kubeServer', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
+         sshPublisher{
+         failOnError: true,
+         continueOnError: false,
+         publishers: {
+             configName: 'kubernates',
+             sshCredentials: [
+                username: "$USERNAME",
+                encryptedPassphrase: "$USERPASS"
+             ],
+             transfers: [
+                sshTransfer(
+                   sourceFiles: 'kube-deployment.yml',
+                   remoteDirectory: '/'
+                   execCommand:'sudo cat /etc/hostname'
+                )
+             ]
+         }
+         }
+         }
        }
      }
    }
