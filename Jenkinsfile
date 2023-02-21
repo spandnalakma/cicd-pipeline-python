@@ -56,8 +56,8 @@ pipeline{
                                 transfers: [
                                     sshTransfer(
                                         sourceFiles: 'kube-deployment.yml',
-                                        remoteDirectory: '/',
-                                        execCommand: 'ls -lrt'
+                                        remoteDirectory: '/tmp/',
+                                        execCommand: 'kubectl apply -f /tmp/kube-deployment.yml'
                                     )
                                 ]
                             )
