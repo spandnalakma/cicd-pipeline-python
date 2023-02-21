@@ -53,7 +53,7 @@ pipeline{
                                     sshTransfer(
                                         sourceFiles: '/kube-deployment.yml',
                                         remoteDirectory: '/',
-                                        execCommand: 'sudo cat /etc/hostname'
+                                        execCommand: 'ls -lrt'
                                     )
                                 ]
                             )
