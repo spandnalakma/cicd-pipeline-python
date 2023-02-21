@@ -30,34 +30,36 @@ pipeline{
            }
         }
      }
-     stage("Deploy to Production"){
-       when{
-         branch 'master'
-       }
-       steps{
-         input 'Deploy to Production?'
-         milestone(1)
-         withCredentials([usernamePassword(credentialsId: 'kubeServer', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
-         sshPublisher{
-         failOnError: true,
-         continueOnError: false,
-         publishers: {
-             configName: 'kubernates',
-             sshCredentials: [
-                username: "$USERNAME",
-                encryptedPassphrase: "$USERPASS"
-             ],
-             transfers: [
-                sshTransfer(
-                   sourceFiles: 'kube-deployment.yml',
-                   remoteDirectory: '/'
-                   execCommand:'sudo cat /etc/hostname'
-                )
-             ]
-         }
-         }
-         }
-       }
-     }
+      stage('Deploy To Production') {
+            when {
+                branch 'master'
+            }
+            steps {
+                input 'Deploy to Production?'
+                milestone(1)
+                withCredentials([usernamePassword(credentialsId: 'kubeServer', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
+                    sshPublisher(
+                        failOnError: true,
+                        continueOnError: false,
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'kubernates',
+                                sshCredentials: [
+                                    username: "$USERNAME",
+                                    encryptedPassphrase: "$USERPASS"
+                                ],
+                                transfers: [
+                                    sshTransfer(
+                                        sourceFiles: 'kube-deployment.yml',
+                                        remoteDirectory: '/',
+                                        execCommand: 'sudo cat /etc/hostname'
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                }
+            }
+        }
    }
 }
