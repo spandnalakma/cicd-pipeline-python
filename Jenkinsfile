@@ -44,6 +44,7 @@ pipeline{
                         publishers: [
                             sshPublisherDesc(
                                 configName: 'kubernates',
+                                verbose: true,
                                 sshCredentials: [
                                     username: "$USERNAME",
                                     encryptedPassphrase: "$USERPASS"
