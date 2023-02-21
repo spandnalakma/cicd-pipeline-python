@@ -37,6 +37,9 @@ pipeline{
             steps {
                 input 'Deploy to Production?'
                 milestone(1)
+                sh """#!bin/bash -l
+                  ls -lrt
+                """
                 withCredentials([usernamePassword(credentialsId: 'kubeServer', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     sshPublisher(
                         failOnError: true,
