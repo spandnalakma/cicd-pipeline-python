@@ -51,7 +51,7 @@ pipeline{
                                 ],
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: 'kube-deployment.yml',
+                                        sourceFiles: '/kube-deployment.yml',
                                         remoteDirectory: '/',
                                         execCommand: 'sudo cat /etc/hostname'
                                     )
@@ -63,10 +63,4 @@ pipeline{
             }
         }
    }
-    post {
-         always {
-             echo 'One way or another, I have finished'
-             deleteDir() /* clean up our workspace */
-         }
-    }
 }
