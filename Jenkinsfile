@@ -9,7 +9,7 @@ pipeline{
            script{
              app = docker.build("spandanalakma/python_flask")
 //              app.inside{
-//                  sh 'echo ${curl localhost:8080}'
+//                  sh "echo ${curl localhost:8080}"
 //              }
            }
        }
