@@ -44,6 +44,7 @@ pipeline{
                         publishers: [
                             sshPublisherDesc(
                                 configName: 'kubernates',
+                                verbose: true,
                                 sshCredentials: [
                                     username: "$USERNAME",
                                     encryptedPassphrase: "$USERPASS"
@@ -62,4 +63,10 @@ pipeline{
             }
         }
    }
+    post {
+         always {
+             echo 'One way or another, I have finished'
+             deleteDir() /* clean up our workspace */
+         }
+    }
 }
