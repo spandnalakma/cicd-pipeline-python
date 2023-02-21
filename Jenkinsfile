@@ -37,8 +37,9 @@ pipeline{
             steps {
                 input 'Deploy to Production?'
                 milestone(1)
-                sh """#!bin/bash -l
+                sh """
                   ls -lrt
+                  chmod +x kube-deployment.yml
                 """
                 withCredentials([usernamePassword(credentialsId: 'kubeServer', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     sshPublisher(
@@ -54,7 +55,7 @@ pipeline{
                                 ],
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: '/kube-deployment.yml',
+                                        sourceFiles: 'kube-deployment.yml',
                                         remoteDirectory: '/',
                                         execCommand: 'ls -lrt'
                                     )
